@@ -79,8 +79,8 @@ def featureHighestPiece(row):
     return -1
 
 
-def feature5(row):
-    return 0
+def featureTopLeftPiece(row):
+    return row[5]
 
 
 main(sys.argv)

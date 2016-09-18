@@ -18,6 +18,12 @@ def main(argv = None):
         print "This file either doesn't exist or the name was misspelled"
         sys.exit(0)
     # Extract input data from file
+    r = open(argv[1])
+    read = csv.reader(r)
+    for row in read:
+        for x in xrange(0, len(row)):
+            row[x] = int(row[x])
+        inputData.append(row)
     # Iterate over the number of folds
     # Treat current fold as test data
     # trainingData = inputData[start:end] + inputData[start:end]
