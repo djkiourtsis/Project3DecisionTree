@@ -11,8 +11,9 @@ def main(argv = None):
         return
     inputData = []
     trainingData = []
-    featureSuccess = []
-    featureFail = []
+    featureSuccess = [0, 0, 0, 0, 0]
+    featureTests = [0, 0, 0, 0, 0]
+    testingData = []
     # try and open file
     if not os.path.isfile(argv[1]):
         print "This file either doesn't exist or the name was misspelled"
@@ -25,11 +26,28 @@ def main(argv = None):
             row[x] = int(row[x])
         inputData.append(row)
     # Iterate over the number of folds
-    # Treat current fold as test data
-    # trainingData = inputData[start:end] + inputData[start:end]
-    # Create decision tree with rest as training data
-    # Run fold as test data and modify feature success/fail
+    split = len(inputData)/int(argv[2])
+    for fold in xrange(0, int(argv[2])):
+        # Treat current fold as test data
+        # trainingData = inputData[start:end] + inputData[start:end]
+        foldStartIndex = int(fold * split)
+        foldEndIndex = int((fold * split) + split)
+        testingData = inputData[foldStartIndex:foldEndIndex]
+        trainingData = inputData[0:foldStartIndex] + inputData[foldEndIndex:len(inputData)]
+        # Create decision tree with rest as training data
+        dTree = decisionTree(None, [], [0,1,2,3,4], trainingData)
+        # Run fold as test data and modify feature success/fail
+        for row in xrange(0, len(testingData)):
+            featureSplits, output = dTree.testData(testingData[row])
+            for f in xrange(len(featureSplits)):
+                featureTests[featureSplits[f]] += 1
+                if output == testingData[row][42]:
+                    featureSuccess[featureSplits[f]] += 1
     # Print output for each feature
+    for row in xrange(0, len(featureSuccess)):
+        print featureSuccess[row]
+    for row in xrange(0, len(featureTests)):
+        print featureTests[row]
     return 0
 
 
