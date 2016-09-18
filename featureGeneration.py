@@ -21,23 +21,23 @@ def main(argv = None):
     return 0
 
 
-def featurePieceBottomLeft(board):
+def featurePieceBottomLeft(row):
     return 0
 
 
-def featureCenterControl(board):
+def featureCenterControl(row):
     return 0
 
 
-def feature3(board):
+def feature3(row):
     return 0
 
 
-def feature4(board):
+def feature4(row):
     return 0
 
 
-def feature5(board):
+def feature5(row):
     return 0
 
 
