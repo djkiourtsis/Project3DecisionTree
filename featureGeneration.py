@@ -22,19 +22,40 @@ def main(argv = None):
 
 
 def featurePieceBottomLeft(row):
-    return 0
+    return row[0]
 
 
 def featureCenterControl(row):
-    return 0
+    score = 0
+    for col in xrange(2,5):
+        for row in xrange(0,6):
+            if(row[6*col + row] == 1):
+                score += 1
+            elif(row[6*col + row] == 2):
+                score -= 1
+    return score
 
 
-def feature3(row):
-    return 0
+def featureBottomControl(row):
+    score = 0
+    for row in xrange(0, 2):
+        for col in xrange(0, 6):
+            if (row[6 * col + row] == 1):
+                score += 1
+            elif (row[6 * col + row] == 2):
+                score -= 1
+    return score
 
 
-def feature4(row):
-    return 0
+def featureHighestPiece(row):
+    score = 0
+    for row in xrange(0, 6):
+        for col in xrange(0, 6):
+            if (row[6 * col + (6-row)] == 1):
+                return 1
+            elif (row[6 * col + (6-row)] == 2):
+                return 2
+    return -1
 
 
 def feature5(row):
