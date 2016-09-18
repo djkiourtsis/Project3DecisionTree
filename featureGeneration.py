@@ -15,24 +15,30 @@ def main(argv = None):
         print "This file either doesn't exist or the name was misspelled"
         sys.exit(0)
     # Read file line by line
-    r = open(argv[1], "rb")
+    r = open(argv[1])
+    r.next()
     read = csv.reader(r)
     for row in read:
-        inputData.append(row)    
+        for x in xrange(0, len(row)):
+            row[x] = int(row[x])
+        inputData.append(row)
     # For each line of data extract features
+    #print inputData
     for row in inputData:
         feature1 = featurePieceBottomLeft(row)
         feature2 = featureCenterControl(row)
         feature3 = featureBottomControl(row)
         feature4 = featureHighestPiece(row)
-        feature5 = feature5(row)
-    # Add extracted features to output data
-        outputData.append(inputData[row].extend(feature1,feature2,feature3,feature4,feature5))
+        features5 = feature5(row)
+        # Add extracted features to output data
+        row.extend([feature1,feature2,feature3,feature4,features5])
+        outputData.append(row)
     # Save all data to output file
     o = open(argv[2], "wb+")
     write = csv.writer(o)
     for row in outputData:
-        writer.writerow(row)
+        print row
+        write.writerow(row)
     return 0
 
 
@@ -42,33 +48,33 @@ def featurePieceBottomLeft(row):
 
 def featureCenterControl(row):
     score = 0
-    for col in xrange(2,5):
-        for row in xrange(0,6):
-            if(row[6*col + row] == 1):
+    for c in xrange(2,5):
+        for r in xrange(0,6):
+            if(row[6*c + r] == 1):
                 score += 1
-            elif(row[6*col + row] == 2):
+            elif(row[6*c + r] == 2):
                 score -= 1
     return score
 
 
 def featureBottomControl(row):
     score = 0
-    for row in xrange(0, 2):
-        for col in xrange(0, 6):
-            if (row[6 * col + row] == 1):
+    for r in xrange(0, 2):
+        for c in xrange(0, 6):
+            if (row[6 * c + r] == 1):
                 score += 1
-            elif (row[6 * col + row] == 2):
+            elif (row[6 * c + r] == 2):
                 score -= 1
     return score
 
 
 def featureHighestPiece(row):
     score = 0
-    for row in xrange(0, 6):
-        for col in xrange(0, 6):
-            if (row[6 * col + (6-row)] == 1):
+    for r in xrange(0, 6):
+        for c in xrange(0, 6):
+            if (row[6 * c + (6-r)] == 1):
                 return 1
-            elif (row[6 * col + (6-row)] == 2):
+            elif (row[6 * c + (6-r)] == 2):
                 return 2
     return -1
 
