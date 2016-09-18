@@ -15,9 +15,24 @@ def main(argv = None):
         print "This file either doesn't exist or the name was misspelled"
         sys.exit(0)
     # Read file line by line
+    r = open(argv[1], "rb")
+    read = csv.reader(r)
+    for row in read:
+        inputData.append(row)    
     # For each line of data extract features
+    for row in inputData:
+        feature1 = featurePieceBottomLeft(row)
+        feature2 = featureCenterControl(row)
+        feature3 = featureBottomControl(row)
+        feature4 = featureHighestPiece(row)
+        feature5 = feature5(row)
     # Add extracted features to output data
+        outputData.append(inputData[row].extend(feature1,feature2,feature3,feature4,feature5))
     # Save all data to output file
+    o = open(argv[2], "wb+")
+    write = csv.writer(o)
+    for row in outputData:
+        writer.writerow(row)
     return 0
 
 
