@@ -29,7 +29,7 @@ def main(argv = None):
         feature2 = featureCenterControl(row)
         feature3 = featureBottomControl(row)
         feature4 = featureHighestPiece(row)
-        features5 = feature5(row)
+        features5 = featureTopLeftPiece(row)
         # Add extracted features to output data
         row.extend([feature1,feature2,feature3,feature4,features5])
         outputData.append(row)
