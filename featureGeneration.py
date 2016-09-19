@@ -70,9 +70,9 @@ def featureBottomControl(row):
 def featureHighestPiece(row):
     for r in xrange(0, 6):
         for c in xrange(0, 6):
-            if (row[6 * c + (6-r)] == 1):
+            if (row[6 * c + (5-r)] == 1):
                 return 1
-            elif (row[6 * c + (6-r)] == 2):
+            elif (row[6 * c + (5-r)] == 2):
                 return 2
     return -1
 
@@ -82,13 +82,10 @@ def featureHighestPlayerPieces(row):
     score2 = 0
     for r in xrange(0, 6):
         for c in xrange(0, 6):
-            if(row[6 * c + (6-r)] == 1):
-                score1 += 1
-            elif(row[6 * c + (6-r)] == 2):
-                score2 += 1
-            elif(row[6 * c + (6-r)] == 0):
-                score1 += 0
-                score2 += 0
+            if(row[6 * c + r] == 1):
+                score1 += r + 1
+            elif(row[6 * c + r] == 2):
+                score2 += r + 1
     if(score1 > score2):
         return 1
     elif(score2 > score1):
