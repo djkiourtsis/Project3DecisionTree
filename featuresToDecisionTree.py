@@ -45,25 +45,31 @@ def main(argv = None):
                     featureSuccess[featureSplits[f]] += 1
     # Print output for each feature
     for row in xrange(0, len(featureSuccess)):
+        print "Succesful classifications for feature #" + str(row+1)
         print featureSuccess[row]
-    for row in xrange(0, len(featureTests)):
-        print featureTests[row]
+        print "Failed classifications for feature #" + str(row+1)
+        print featureTests[row]-featureSuccess[row]
+        print "Error %"
+        print float(featureTests[row] - featureSuccess[row])/featureTests[row]
+        print ""
     return 0
 
 
 class decisionTree:
-    parentNode = None
-    childNodes = []
-    childSplitValues = []
-    splitFeatureID = 0
-    prevFeatureIDs = []
-    remainingFeatureIDs = []
-    treeTrainingData = None
-    baseCaseOutput = -1
-    numFeatures = 5
-    treeEntropy = 0.0
-    # stuff
-    def __init__(self, parentNode, prevFeatureIDs, remainingFeatureIDs, treeTrainingData, treeEntropy):
+    # class static variables
+    def __init__(self, parentNode, prevFeatureIDs, remainingFeatureIDs, treeTrainingData):
+        # Object specific variables
+        self.parentNode = None
+        self.childNodes = []
+        self.childSplitValues = []
+        self.splitFeatureID = 0
+        self.prevFeatureIDs = []
+        self.remainingFeatureIDs = []
+        self.treeTrainingData = None
+        self.baseCaseOutput = -1
+        self.numFeatures = 5
+        self.treeEntropy = 0.0
+        # Set data
         self.parentNode = parentNode
         self.prevFeatureIDs = prevFeatureIDs
         self.remainingFeatureIDs = remainingFeatureIDs
@@ -123,17 +129,17 @@ class decisionTree:
                         featureValues[bestGainIndex][x]):
                     splitTrainingData.append(self.treeTrainingData[i])
             # Generate child for each possible split of feature
-            child = decisionTree(self, self.prevFeatureIDs.append(self.splitFeatureID),
+            child = decisionTree(self, self.prevFeatureIDs + [self.splitFeatureID],
                                  childRemainingFeatures, splitTrainingData)
             # Add child and split feature value to self
             self.childNodes.append(child)
-            self.childSplitValues.append(featureValues[bestGainIndex])
+            self.childSplitValues.append(featureValues[bestGainIndex][x])
         return
     #stuff
     def testData(self, testArray):
         # check if base case.  Return output and prevFeatureIDs if so.
         if self.baseCaseOutput != -1:
-            return [self.prevFeatureIDs.append(self.splitFeatureID), self.baseCaseOutput]
+            return [self.prevFeatureIDs + [self.splitFeatureID], self.baseCaseOutput]
         # pass testData to correct child
         for x in xrange(len(self.childSplitValues)):
             if testArray[43+self.splitFeatureID] == self.childSplitValues[x]:
@@ -149,10 +155,10 @@ def gain(dataArray, featureValues, treeEntropy):
         s = 0
         # numClassified is the number of data points that have the same feature value
         numClassified = 0
-        for row in xrange(len(dataArray)):
-            if (dataArray[row][0] == featureValues[x]):
+        for row in xrange(len(dataArray[0])):
+            if (dataArray[0][row] == featureValues[x]):
                 numClassified += 1
-                if (dataArray[row][1] == 1):
+                if (dataArray[1][row] == 1):
                     s += 1
         remainder += (float(numClassified)/len(dataArray))*binaryEntropy(float(s)/numClassified)
     return treeEntropy - remainder
@@ -160,7 +166,9 @@ def gain(dataArray, featureValues, treeEntropy):
 
 # Entropy is binary since only possible outcomes are win/loss for player 1
 def binaryEntropy(p):
-    return -1*(p*math.log2(p)+(1-p)*math.log2(1-p))
+    if(p==1 or p==0):
+        return 0
+    return -1*(p*math.log(p,2)+(1-p)*math.log(1-p,2))
 
 
 main(sys.argv)
