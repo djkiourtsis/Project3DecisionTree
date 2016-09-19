@@ -29,7 +29,7 @@ def main(argv = None):
         feature2 = featureCenterControl(row)
         feature3 = featureBottomControl(row)
         feature4 = featureHighestPiece(row)
-        features5 = featureTopLeftPiece(row)
+        features5 = featureHighestPlayerPieces(row)
         # Add extracted features to output data
         row.extend([feature1,feature2,feature3,feature4,features5])
         outputData.append(row)
@@ -37,7 +37,6 @@ def main(argv = None):
     o = open(argv[2], "wb+")
     write = csv.writer(o)
     for row in outputData:
-        print row
         write.writerow(row)
     return 0
 
@@ -69,7 +68,6 @@ def featureBottomControl(row):
 
 
 def featureHighestPiece(row):
-    score = 0
     for r in xrange(0, 6):
         for c in xrange(0, 6):
             if (row[6 * c + (6-r)] == 1):
@@ -79,8 +77,24 @@ def featureHighestPiece(row):
     return -1
 
 
-def featureTopLeftPiece(row):
-    return row[5]
+def featureHighestPlayerPieces(row):
+    score1 = 0
+    score2 = 0
+    for r in xrange(0, 6):
+        for c in xrange(0, 6):
+            if(row[6 * c + (6-r)] == 1):
+                score1 += 1
+            elif(row[6 * c + (6-r)] == 2):
+                score2 += 1
+            elif(row[6 * c + (6-r)] == 0):
+                score1 += 0
+                score2 += 0
+    if(score1 > score2):
+        return 1
+    elif(score2 > score1):
+        return 2
+    elif(score1 == score2):
+        return 0
 
 
 main(sys.argv)
